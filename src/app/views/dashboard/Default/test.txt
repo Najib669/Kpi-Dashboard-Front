@@ -1,0 +1,432 @@
+<>
+      <Grid item xs={12} md={9}>
+        <Grid container spacing={gridSpacing}>
+          <Grid item xs={12} lg={4}>
+            {getInterventionsToday.isSuccess && (
+              <CustomerSatisfactionCard
+                title="Interventions D'aujourd'hui"
+                // childStats={getInterventionsToday.data.arrayStates}
+                mainStats={getInterventionsToday.data.interventionsToday}
+              />
+            )}
+            {/* <RevenueCard
+              primary="Inspections"
+              secondary={dashboardStatsQuery.data?.nbInspections}
+              content="$50,032 Last Month"
+              iconPrimary={ContentPasteSearchIcon}
+              color={theme.palette.secondary.main}
+            /> */}
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <CustomerSatisfactionCard
+              title="Nombre des Interventions Réalisé"
+              childStats={dashboardStatsQuery?.data?.arrayChantiers}
+              mainStats={dashboardStatsQuery?.data?.nbLots}
+            />
+
+            {/* <RevenueCard
+              primary="Lots Chantiers"
+              secondary={dashboardStatsQuery.data?.nbLots}
+              content="20% Increase"
+              iconPrimary={FoundationIcon}
+              color={theme.palette.primary.main}
+            /> */}
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <CustomerSatisfactionCard
+              title="Nombre des Interventions Réalisé"
+              childStats={dashboardStatsQuery?.data?.arrayChantiers}
+              mainStats={dashboardStatsQuery?.data?.nbLots}
+            />
+
+            {/* <RevenueCard
+              primary="Lots Chantiers"
+              secondary={dashboardStatsQuery.data?.nbLots}
+              content="20% Increase"
+              iconPrimary={FoundationIcon}
+              color={theme.palette.primary.main}
+            /> */}
+          </Grid>
+
+          {user?.role.includes('admin') ? (
+            <Grid item xs={12}>
+              <InspectionsBarChart
+                filterValue={inspectionFilterValue}
+                onFilterValueChange={setInspectionFilterValue}
+                filter={[
+                  {
+                    value: 'client',
+                    label: 'Client'
+                  },
+                  {
+                    value: 'technicien',
+                    label: 'Technicien'
+                  }
+                ]}
+                isLoading={isLoading}
+                title={`Inspections par ${inspectionFilterValue}s`}
+                chartDataa={dashboardStatsQuery.data?.grapheTechniciens}
+              />
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <InspectionsBarChart
+                title={user?.role.includes('client') ? `Commandes` : `Inspections`}
+                filterValue={inspectionFilterValue}
+                onFilterValueChange={setInspectionFilterValue}
+                isLoading={isLoading}
+                chartDataa={dashboardStatsQuery.data?.barChart}
+              />
+            </Grid>
+          )}
+          {/* <Grid item lg={4} md={6} sm={6} xs={12}>
+            <EarningCard
+              isLoading={isLoading}
+              data={dashboardStatsQuery.data?.nbInspections}
+              filterValue={totalInspectionsValue}
+              onFilterValueChange={setTotalInspectionsFilterValue}
+            />
+          </Grid>
+          <Grid item lg={4} md={6} sm={6} xs={12}>
+            <TotalOrderLineChartCard isLoading={isLoading} data={dashboardStatsQuery.data?.nbLots} />
+          </Grid> */}
+
+          {/* {false && (
+                <Grid item lg={4} md={12} sm={12} xs={12}>
+                  <Grid container spacing={gridSpacing}>
+                    <Grid item sm={6} xs={12} md={6} lg={12}>
+                      <TotalIncomeDarkCard isLoading={isLoading} data={dashboardStatsQuery.data?.nbChantiers} />
+                    </Grid>
+                    <Grid item sm={6} xs={12} md={6} lg={12}>
+                      <TotalIncomeLightCard isLoading={isLoading} data={dashboardStatsQuery.data?.nbContract} />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              )} */}
+
+          <Grid item xs={12}>
+            <LatestInspectionsTableCard title="Derniers Inspections" data={dashboardStatsQuery.data?.inspections} />
+
+            {/* <InspectionsList
+              title="Inspections"
+              disableFilters
+              disableCreate
+              disableCheckboxSelection={true}
+              overrideData={dashboardStatsQuery.data?.inspections}
+              disableAdresse
+              disableEtat
+              disableAffectationDate
+            /> */}
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} md={3}>
+        <Grid container spacing={gridSpacing}>
+          {/* <Grid item xs={12}>
+              <MainCard
+                content={false}
+                sx={{
+                  '& svg': {
+                    width: 50,
+                    height: 50,
+                    color: theme.palette.secondary.main,
+                    borderRadius: '14px',
+                    p: 1.25,
+                    bgcolor: theme.palette.mode === 'dark' ? theme.palette.background.default : 'primary.light'
+                  }
+                }}
+              >
+                <Grid container alignItems="center" spacing={0}>
+                  {dashboardStatsQuery.data?.nbChantiers !== null && (
+                    <Grid item xs={12} sm={6} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <EngineeringIcon sx={{ fill: '#1a3253' }} stroke={1.5} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.nbChantiers}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Chantiers Validées
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.nbContract !== null && (
+                    <Grid item xs={12} sm={6} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <AssignmentIcon sx={{ fill: '#1a3253' }} stroke={1.5} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.nbContract}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Contrats
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.satisfiedRapports !== null && (
+                    <Grid item xs={12} sm={6} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <TaskIcon sx={{ fill: '#1a3253' }} stroke={1.5} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.satisfiedRapports}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Rapports satisfaits
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.inspectionEtatTerminer !== null && (
+                    <Grid item xs={12} sm={6} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <AssignmentTurnedInIcon stroke={1.5} sx={{ fill: '#1a3253' }} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.inspectionEtatTerminer}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Inspections termineés
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.nbInspectionsToDo !== null && (
+                    <Grid item xs={12} sm={12} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <EngineeringIcon stroke={1.5} sx={{ fill: '#1a3253' }} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.nbInspectionsToDo}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Inspections à faire
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.nbInspectionsValider !== null && (
+                    <Grid item xs={12} sm={12} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <EngineeringIcon stroke={1.5} sx={{ fill: '#1a3253' }} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.nbInspectionsValider}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Inspections Validées
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {dashboardStatsQuery.data?.nbInspectionsTerminer !== null && (
+                    <Grid item xs={12} sm={12} sx={blockSX}>
+                      <Grid container alignItems="center" spacing={1} justifyContent={matchDownXs ? 'space-between' : 'center'} gap={2}>
+                        <Grid item>
+                          <EngineeringIcon stroke={1.5} sx={{ fill: '#1a3253' }} />
+                        </Grid>
+                        <Grid item sm zeroMinWidth>
+                          <Typography variant="h5" align="center">
+                            {dashboardStatsQuery.data?.nbInspectionsTerminer}
+                          </Typography>
+                          <Typography variant="subtitle2" align="center">
+                            Inspections terminer
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                </Grid>
+              </MainCard>
+            </Grid> */}
+          {/* <RapportPieChartCard
+              chartData={{
+                height: 300,
+                type: 'pie',
+                options: {
+                  colors: dashboardStatsQuery.data?.inspectionsByEtat?.colors,
+                  chart: {
+                    id: 'chantier-chart'
+                  },
+                  // labels: ['A inspecter', 'Non inspectes', 'Inspectes', 'Validées'],
+                  labels: dashboardStatsQuery.data?.inspectionsByEtat?.labels,
+                  legend: {
+                    show: true,
+                    position: 'bottom',
+                    fontFamily: 'inherit',
+                    labels: {
+                      colors: 'inherit'
+                    }
+                  },
+                  dataLabels: {
+                    enabled: true,
+                    dropShadow: {
+                      enabled: false
+                    }
+                  }
+                  // theme: {
+                  //   monochrome: {
+                  //     enabled: true
+                  //   }
+                  // }
+                },
+                series: dashboardStatsQuery.data?.inspectionsByEtat?.series
+              }}
+              title="Inspections"
+            /> */}
+
+          {/* <Grid item xs={12} spacing={1} gap={2}>
+              <div>
+                <RapportPieChartCard
+                  chartData={{
+                    height: 300,
+                    type: 'pie',
+                    options: {
+                      colors: dashboardStatsQuery.data?.inspectionsByEtat?.colors,
+                      chart: {
+                        id: 'chantier-chart'
+                      },
+                      // labels: ['A inspecter', 'Non inspectes', 'Inspectes', 'Validées'],
+                      labels: dashboardStatsQuery.data?.inspectionsByEtat?.labels,
+                      legend: {
+                        show: true,
+                        position: 'bottom',
+                        fontFamily: 'inherit',
+                        labels: {
+                          colors: 'inherit'
+                        }
+                      },
+                      dataLabels: {
+                        enabled: true,
+                        dropShadow: {
+                          enabled: false
+                        }
+                      }
+                      // theme: {
+                      //   monochrome: {
+                      //     enabled: true
+                      //   }
+                      // }
+                    },
+                    series: dashboardStatsQuery.data?.inspectionsByEtat?.series
+                  }}
+                  title="Inspections"
+                />
+              </div>
+              <div style={{ marginTop: '2rem' }}>
+                <RapportPieChartCard
+                  chartData={{
+                    height: 300,
+                    type: 'pie',
+
+                    options: {
+                      colors: dashboardStatsQuery.data?.inspectionsByEtat?.colors,
+                      chart: {
+                        id: 'chantier-chart'
+                      },
+                      // labels: ['A inspecter', 'Non inspectes', 'Inspectes', 'Validées'],
+                      labels: dashboardStatsQuery.data?.inspectionsByStatus?.labels,
+                      legend: {
+                        show: true,
+                        position: 'bottom',
+                        fontFamily: 'inherit',
+                        labels: {
+                          colors: 'inherit'
+                        }
+                      },
+                      dataLabels: {
+                        enabled: true,
+                        dropShadow: {
+                          enabled: false
+                        }
+                      },
+                      theme: {
+                        mode: 'light',
+                        palette: 'palette1',
+                        monochrome: {
+                          enabled: false,
+                          color: '#255aee',
+                          shadeTo: 'light',
+                          shadeIntensity: 0.65
+                        }
+                      }
+                    },
+                    series: dashboardStatsQuery.data?.inspectionsByStatus?.series
+                  }}
+                  title="Rapports"
+                />
+              </div>
+            </Grid> */}
+
+          {/* <Grid item xs={12}>
+                <UserCountCard
+                  primary="Daily page view"
+                  secondary="1K"
+                  // iconPrimary={DescriptionTwoToneIcon}
+                  color={theme.palette.primary.main}
+                />
+              </Grid> */}
+
+          <Grid item xs={12}>
+            {/* <PopularCard isLoading={isLoading} title={'Rapports'} data={dashboardStatsQuery.data?.rapports} /> */}
+            {/* {getInterventionsPourcentage.isSuccess && (
+              <RapportPieChartCard
+                chartData={{
+                  height: 300,
+                  type: 'pie',
+                  options: {
+                    chart: {
+                      id: 'chantier-chart'
+                    },
+                    labels: getInterventionsPourcentage.data.technicien,
+                    legend: {
+                      show: true,
+                      position: 'bottom',
+                      fontFamily: 'inherit',
+                      labels: {
+                        colors: 'inherit'
+                      }
+                    },
+
+                    dataLabels: {
+                      enabled: true,
+                      dropShadow: {
+                        enabled: false
+                      }
+                    }
+                    // theme: {
+                    //   monochrome: {
+                    //     enabled: true
+                    //   }
+                    // }
+                  },
+                  series: dashboardStatsQuery.data?.inspectionsByEtat?.series
+                  // series: getInterventionsPourcentage.data.percentage
+                }}
+                title="Interventions"
+              />
+            )} */}
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
